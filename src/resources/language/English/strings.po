@@ -1,0 +1,127 @@
+# MCPi language file
+# Addon Name: System Recovery
+# Addon id: plugin.recovery
+# Addon Provider: AMSD
+msgid ""
+msgstr ""
+"Project-Id-Version: System Recovery\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30011"
+msgid "General"
+msgstr ""
+
+msgctxt "#30012"
+msgid "%Resources"
+msgstr ""
+
+#empty strings from id 30014 to 30015
+
+msgctxt "#30016"
+msgid "Backup"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Restore"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Browse Path"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Type Path"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Browse Remote Path"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Select Backup Folder Name"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Remote Path Type"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Type Remote Path"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Compress Archives"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Backups to keep (0 for all)"
+msgstr ""
+
+msgctxt "#30030"
+msgid "User Addons"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Addon Data"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Database"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Playlist"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Thumbnails/Fanart"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Config Files"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Custom Directory 1"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Custom Directory 2"
+msgstr ""
+
+msgctxt "#30038"
+msgid "Custom Directory 3"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Profiles"
+msgstr ""
+
+
+msgctxt "#30045"
+msgid "Error: Remote path doesn't exist"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Starting new backup session"
+msgstr ""
+
+msgctxt "#30055"
+msgid "Starting restore session"
+msgstr ""
+
+msgctxt "#30056"
+msgid "Backup session has been finished"
+msgstr ""
+
+msgctxt "#30057"
+msgid "Restore session has been finished"
+msgstr ""
+
+msgctxt "#30058"
+msgid "Restart MCPi?"
+msgstr ""
