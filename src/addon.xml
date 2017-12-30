@@ -9,7 +9,8 @@
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<summary>System Recovery - Backup and Restore</summary>
-		<description lang="en">You can export MCPi databases, playlist, thumbnails, addons and other configuration details to any writable source by MCPi. Backups can be run on demand or via a scheduler</description>
+		<description>You can export MCPi databases, playlist, thumbnails, addons and other configuration details to any writable source by MCPi. Backups can be run on demand or via a scheduler</description>
 		<platform>all</platform>
+		<language>en</language>
 	</extension>
 </addon>
