@@ -16,7 +16,7 @@ msgid "General"
 msgstr ""
 
 msgctxt "#30012"
-msgid "%Resources"
+msgid "Resources"
 msgstr ""
 
 #empty strings from id 30014 to 30015
