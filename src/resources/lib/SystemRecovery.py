@@ -4,7 +4,7 @@ import os
 import sys
 import time
 import json
-import Commons as commons
+import commons
 from resources.lib.SettingsManager import SettingsManager
 from resources.lib.FileSystem import LocalFileSystem, ZipFileSystem, FileManager
 
@@ -37,14 +37,14 @@ class SystemRecovery:
 		self.remoteBasePath = None
 		self.fileManager = None
 		self.restorePoint = None
-		self.localFS = LocalFileSystem(commons.getSpecialPath('special://home'))
+		self.localFS = LocalFileSystem(commons.path('special://home'))
 		if commons.setting('remote_selection') == 1:
-			self.remoteBasePath = commons.getSetting('remote_path_2')
-			self.remoteFS = LocalFileSystem(commons.getSetting('remote_path_2'))
-			commons.setSetting("remote_path","")
+			self.remoteBasePath = commons.getAddonSetting('remote_path_2')
+			self.remoteFS = LocalFileSystem(commons.getAddonSetting('remote_path_2'))
+			commons.setAddonSetting("remote_path", "")
 		elif commons.setting('remote_selection') == 0:
-			self.remoteBasePath = commons.getSetting('remote_path')
-			self.remoteFS = LocalFileSystem(commons.getSetting("remote_path"))		
+			self.remoteBasePath = commons.getAddonSetting('remote_path')
+			self.remoteFS = LocalFileSystem(commons.getAddonSetting("remote_path"))		
 
 	def isRemote(self):
 		return not (self.remoteBasePath is None or self.remoteBasePath == "")
@@ -103,57 +103,57 @@ class SystemRecovery:
 		fileManager = FileManager(self.localFS)
 		# go through each of the user selected items and write them to the backup store
 		if commons.setting('backup_addons'):
-			fileManager.addFile("-" + commons.getSpecialPath('special://home/addons'))
-			fileManager.walkTree(commons.getSpecialPath('special://home/addons'))
-		fileManager.addFile("-" + commons.getSpecialPath('special://home/userdata'))
+			fileManager.addFile("-" + commons.path('special://home/addons'))
+			fileManager.walkTree(commons.path('special://home/addons'))
+		fileManager.addFile("-" + commons.path('special://home/userdata'))
 		if commons.setting('backup_addon_data'):
-			fileManager.addFile("-" + commons.getSpecialPath('special://home/userdata/addon_data'))
-			fileManager.walkTree(commons.getSpecialPath('special://home/userdata/addon_data'))
+			fileManager.addFile("-" + commons.path('special://home/userdata/addon_data'))
+			fileManager.walkTree(commons.path('special://home/userdata/addon_data'))
 		if commons.setting('backup_database'):
-			fileManager.addFile("-" + commons.getSpecialPath('special://home/userdata/Database'))
-			fileManager.walkTree(commons.getSpecialPath('special://home/userdata/Database'))
+			fileManager.addFile("-" + commons.path('special://home/userdata/Database'))
+			fileManager.walkTree(commons.path('special://home/userdata/Database'))
 		if commons.setting("backup_playlists"):
-			fileManager.addFile("-" + commons.getSpecialPath('special://home/userdata/playlists'))
-			fileManager.walkTree(commons.getSpecialPath('special://home/userdata/playlists'))
+			fileManager.addFile("-" + commons.path('special://home/userdata/playlists'))
+			fileManager.walkTree(commons.path('special://home/userdata/playlists'))
 		if commons.setting('backup_profiles'):
-			fileManager.addFile("-" + commons.getSpecialPath('special://home/userdata/profiles'))
-			fileManager.walkTree(commons.getSpecialPath('special://home/userdata/profiles'))
+			fileManager.addFile("-" + commons.path('special://home/userdata/profiles'))
+			fileManager.walkTree(commons.path('special://home/userdata/profiles'))
 		if commons.setting("backup_thumbnails"):
-			fileManager.addFile("-" + commons.getSpecialPath('special://home/userdata/Thumbnails'))
-			fileManager.walkTree(commons.getSpecialPath('special://home/userdata/Thumbnails'))
+			fileManager.addFile("-" + commons.path('special://home/userdata/Thumbnails'))
+			fileManager.walkTree(commons.path('special://home/userdata/Thumbnails'))
 		if commons.setting("backup_config"):
-			fileManager.addFile("-" + commons.getSpecialPath('special://home/userdata/keymaps'))
-			fileManager.walkTree(commons.getSpecialPath('special://home/userdata/keymaps'))
-			fileManager.addFile("-" + commons.getSpecialPath('special://home/userdata/peripheral_data'))
-			fileManager.walkTree(commons.getSpecialPath('special://home/userdata/peripheral_data'))
-			fileManager.addFile('-' + commons.getSpecialPath('special://home/userdata/library'))
-			fileManager.walkTree(commons.getSpecialPath('special://home/userdata/library'))
+			fileManager.addFile("-" + commons.path('special://home/userdata/keymaps'))
+			fileManager.walkTree(commons.path('special://home/userdata/keymaps'))
+			fileManager.addFile("-" + commons.path('special://home/userdata/peripheral_data'))
+			fileManager.walkTree(commons.path('special://home/userdata/peripheral_data'))
+			fileManager.addFile('-' + commons.path('special://home/userdata/library'))
+			fileManager.walkTree(commons.path('special://home/userdata/library'))
 			# this part is an oddity
-			dirs, configFiles = self.localFS.listdir(commons.getSpecialPath('special://home/userdata/'))
+			dirs, configFiles = self.localFS.listdir(commons.path('special://home/userdata/'))
 			for aFile in configFiles:
 				if aFile.endswith(".xml"):
-					fileManager.addFile(commons.getSpecialPath('special://home/userdata/') + aFile)
+					fileManager.addFile(commons.path('special://home/userdata/') + aFile)
 		# add to array
 		allFiles.append({"source":self.localFS.RootPath, "dest":self.remoteFS.RootPath, "files":fileManager.getFiles()})
 		orig_base_path = self.remoteFS.RootPath
 		# check if there are custom directories
-		if commons.setting('custom_dir_1_enable') and commons.getSetting('backup_custom_dir_1') is not None and commons.getSetting('backup_custom_dir_1') != '':
+		if commons.setting('custom_dir_1_enable') and commons.getAddonSetting('backup_custom_dir_1') is not None and commons.getAddonSetting('backup_custom_dir_1') != '':
 			# create a special remote path with hash
-			self.localFS.setRootPath(commons.getSetting('backup_custom_dir_1'))
+			self.localFS.setRootPath(commons.getAddonSetting('backup_custom_dir_1'))
 			fileManager.addFile("-custom_" + self._createCRC(self.localFS.RootPath))
 			# walk the directory
 			fileManager.walkTree(self.localFS.RootPath)
 			allFiles.append({"source":self.localFS.RootPath, "dest":self.remoteFS.RootPath + "custom_" + self._createCRC(self.localFS.RootPath),"files":fileManager.getFiles()})
-		if commons.setting('custom_dir_2_enable') and commons.getSetting('backup_custom_dir_2') is not None and commons.getSetting('backup_custom_dir_2') != '':
+		if commons.setting('custom_dir_2_enable') and commons.getAddonSetting('backup_custom_dir_2') is not None and commons.getAddonSetting('backup_custom_dir_2') != '':
 			# create a special remote path with hash
-			self.localFS.setRootPath(commons.getSetting('backup_custom_dir_2'))
+			self.localFS.setRootPath(commons.getAddonSetting('backup_custom_dir_2'))
 			fileManager.addFile("-custom_" + self._createCRC(self.localFS.RootPath))
 			# walk the directory
 			fileManager.walkTree(self.localFS.RootPath)
 			allFiles.append({"source":self.localFS.RootPath,"dest":self.remoteFS.RootPath + "custom_" + self._createCRC(self.localFS.RootPath),"files":fileManager.getFiles()})
-		if commons.setting('custom_dir_3_enable') and commons.getSetting('backup_custom_dir_3') is not None and commons.getSetting('backup_custom_dir_3') != '':
+		if commons.setting('custom_dir_3_enable') and commons.getAddonSetting('backup_custom_dir_3') is not None and commons.getAddonSetting('backup_custom_dir_3') != '':
 			# create a special remote path with hash
-			self.localFS.setRootPath(commons.getSetting('backup_custom_dir_3'))
+			self.localFS.setRootPath(commons.getAddonSetting('backup_custom_dir_3'))
 			fileManager.addFile("-custom_" + self._createCRC(self.localFS.RootPath))
 			# walk the directory
 			fileManager.walkTree(self.localFS.RootPath)
@@ -173,10 +173,10 @@ class SystemRecovery:
 		if commons.setting("compress_backups"):
 			zip_name = self.remoteFS.RootPath[:-1] + ".zip"
 			self.remoteFS.cleanup()
-			self.localFS.rename(commons.getSpecialPath("special://temp/MCPiBackup.zip"), commons.getSpecialPath("special://temp/" + zip_name))
-			fileManager.addFile(commons.getSpecialPath("special://temp/" + zip_name))
+			self.localFS.rename(commons.path("special://temp/MCPiBackup.zip"), commons.path("special://temp/" + zip_name))
+			fileManager.addFile(commons.path("special://temp/" + zip_name))
 			# set root to data dir home
-			self.localFS.setRootPath(commons.getSpecialPath("special://temp/"))
+			self.localFS.setRootPath(commons.path("special://temp/"))
 			self.remoteFS = self.savedRemoteFS
 			fileCopied = self.backupFiles(fileManager.getFiles(),self.localFS, self.remoteFS)
 			if not fileCopied:
@@ -185,7 +185,7 @@ class SystemRecovery:
 				self.ststus = -1
 				return
 			# delete the temp zip file
-			self.localFS.rmfile(commons.getSpecialPath("special://temp/" + zip_name))
+			self.localFS.rmfile(commons.path("special://temp/" + zip_name))
 		# remove old backups
 		self._rotateBackups()
 
@@ -195,8 +195,8 @@ class SystemRecovery:
 		if self.restorePoint.split('.')[-1] == 'zip':
 			commons.debug("Copying zip file: " + self.restorePoint, "SystemRecovery")
 			# set root to data dir home
-			self.localFS.setRootPath(commons.getSpecialPath("special://temp/"))
-			if not self.localFS.exists(commons.getSpecialPath("special://temp/" + self.restorePoint)):
+			self.localFS.setRootPath(commons.path("special://temp/"))
+			if not self.localFS.exists(commons.path("special://temp/" + self.restorePoint)):
 				# copy just this file from the remote vfs
 				zipFile = []
 				zipFile.append(self.remoteBasePath + self.restorePoint)
@@ -204,12 +204,12 @@ class SystemRecovery:
 			else:
 				commons.debug("Zip file exists already", "SystemRecovery")
 			# extract the zip file
-			zip_vfs = ZipFileSystem(commons.getSpecialPath("special://temp/"+ self.restorePoint),'r')
-			zip_vfs.extract(commons.getSpecialPath("special://temp/"))
+			zip_vfs = ZipFileSystem(commons.path("special://temp/"+ self.restorePoint),'r')
+			zip_vfs.extract(commons.path("special://temp/"))
 			zip_vfs.cleanup()
 			# set the new remote vfs and fix xbmc path
-			self.remoteFS = LocalFileSystem(commons.getSpecialPath("special://temp/" + self.restorePoint.split(".")[0] + "/"))
-			self.localFS.setRootPath(commons.getSpecialPath("special://home/"))
+			self.remoteFS = LocalFileSystem(commons.path("special://temp/" + self.restorePoint.split(".")[0] + "/"))
+			self.localFS.setRootPath(commons.path("special://home/"))
 		# for restores remote path must exist
 		if not os.path.isdir(self.remoteFS.RootPath):
 			commons.error("Error: Remote path doesn't exist: %s" %self.remoteFS.RootPath)
@@ -242,7 +242,7 @@ class SystemRecovery:
 		if commons.setting('backup_addons'):
 			fileManager.addFile('-' + self.remoteFS.RootPath + "addons")
 			fileManager.walkTree(self.remoteFS.RootPath + "addons")
-		self.localFS.mkdir(commons.getSpecialPath('special://home/userdata'))
+		self.localFS.mkdir(commons.path('special://home/userdata'))
 		if commons.setting('backup_addon_data'):
 			fileManager.addFile('-' + self.remoteFS.RootPath + "userdata/addon_data")
 			fileManager.walkTree(self.remoteFS.RootPath + "userdata/addon_data")
@@ -261,8 +261,8 @@ class SystemRecovery:
 		# add to array
 		allFiles.append({"source":self.remoteFS.RootPath,"dest":self.localFS.RootPath,"files":fileManager.getFiles()})
 		# check if there are custom directories
-		if commons.setting('custom_dir_1_enable') and commons.getSetting('backup_custom_dir_1') is not None and commons.getSetting('backup_custom_dir_1') != '':
-			self.localFS.setRootPath(commons.getSetting('backup_custom_dir_1'))
+		if commons.setting('custom_dir_1_enable') and commons.getAddonSetting('backup_custom_dir_1') is not None and commons.getAddonSetting('backup_custom_dir_1') != '':
+			self.localFS.setRootPath(commons.getAddonSetting('backup_custom_dir_1'))
 			if self.remoteFS.exists(self.remoteFS.RootPath + "custom_" + self._createCRC(self.localFS.RootPath)):
 				# index files to restore
 				fileManager.walkTree(self.remoteFS.RootPath + "custom_" + self._createCRC(self.localFS.RootPath))
@@ -270,8 +270,8 @@ class SystemRecovery:
 			else:
 				self.status += 1
 				commons.debug("Error: Remote path doesn't exist: %s" %self.remoteFS.RootPath)
-		if commons.setting('custom_dir_2_enable') and commons.getSetting('backup_custom_dir_2') is not None and commons.getSetting('backup_custom_dir_2') != '':
-			self.localFS.setRootPath(commons.getSetting('backup_custom_dir_2'))
+		if commons.setting('custom_dir_2_enable') and commons.getAddonSetting('backup_custom_dir_2') is not None and commons.getAddonSetting('backup_custom_dir_2') != '':
+			self.localFS.setRootPath(commons.getAddonSetting('backup_custom_dir_2'))
 			if self.remoteFS.exists(self.remoteFS.RootPath + "custom_" + self._createCRC(self.localFS.RootPath)):
 				# index files to restore
 				fileManager.walkTree(self.remoteFS.RootPath + "custom_" + self._createCRC(self.localFS.RootPath))
@@ -279,8 +279,8 @@ class SystemRecovery:
 			else:
 				self.status += 1
 				commons.debug("Error: Remote path doesn't exist: %s" %self.remoteFS.RootPath)
-		if commons.setting('custom_dir_3_enable') and commons.getSetting('backup_custom_dir_3') is not None and commons.getSetting('backup_custom_dir_3') != '':
-			self.localFS.setRootPath(commons.getSetting('backup_custom_dir_3'))
+		if commons.setting('custom_dir_3_enable') and commons.getAddonSetting('backup_custom_dir_3') is not None and commons.getAddonSetting('backup_custom_dir_3') != '':
+			self.localFS.setRootPath(commons.getAddonSetting('backup_custom_dir_3'))
 			if self.remoteFS.exists(self.remoteFS.RootPath + "custom_" + self._createCRC(self.localFS.RootPath)):
 				# index files to restore
 				fileManager.walkTree(self.remoteFS.RootPath + "custom_" + self._createCRC(self.localFS.RootPath))
@@ -295,7 +295,7 @@ class SystemRecovery:
 			self.backupFiles(fileGroup['files'], self.remoteFS, self.localFS)
 		if self.restorePoint.split('.')[-1] == 'zip':
 			# delete the zip file and the extracted directory
-			self.localFS.rmfile(commons.getSpecialPath("special://temp/" + self.restorePoint))
+			self.localFS.rmfile(commons.path("special://temp/" + self.restorePoint))
 			self.localFS.rmdir(self.remoteFS.RootPath)
 		if commons.setting("backup_config"):
 			# update the guisettings information (or what we can from it)
@@ -315,11 +315,11 @@ class SystemRecovery:
 				if mode == self.Backup:
 					if commons.setting("compress_backups"):
 						# delete old temp file
-						if self.localFS.exists(commons.getSpecialPath('special://temp/MCPiBackup.zip')):
-							self.localFS.rmfile(commons.getSpecialPath('special://temp/MCPiBackup.zip'))
+						if self.localFS.exists(commons.path('special://temp/MCPiBackup.zip')):
+							self.localFS.rmfile(commons.path('special://temp/MCPiBackup.zip'))
 						# save the remote file system and use the zip vfs
 						self.savedRemoteFS = self.remoteFS
-						self.remoteFS = ZipFileSystem(commons.getSpecialPath("special://temp/MCPiBackup.zip"),"w")
+						self.remoteFS = ZipFileSystem(commons.path("special://temp/MCPiBackup.zip"),"w")
 					self.remoteFS.setRootPath(self.remoteFS.RootPath + time.strftime("%Y%m%d%H%M") + "/")
 					# run backup process
 					self.backup()
@@ -393,16 +393,16 @@ class SystemRecovery:
 					remove_num += 1
 
 	def _createValidationFile(self):
-		vFile = xbmcvfs.File(commons.getSpecialPath(commons.AddonProfile() + "backup.bvf"), 'w')
+		vFile = xbmcvfs.File(commons.path(commons.AddonProfile() + "backup.bvf"), 'w')
 		vFile.write(json.dumps({"name":"Backup Validation File", "version":xbmc.getInfoLabel('System.BuildVersion')}))
 		vFile.write("")
 		vFile.close()
-		return self.remoteFS.put(commons.getSpecialPath(commons.AddonProfile() + "backup.bvf"), self.remoteFS.RootPath + "backup.bvf")
+		return self.remoteFS.put(commons.path(commons.AddonProfile() + "backup.bvf"), self.remoteFS.RootPath + "backup.bvf")
 
 	def _checkValidationFile(self, path):
 		# copy the file and open it
-		self.localFS.put(path + "backup.bvf", commons.getSpecialPath(commons.AddonProfile() + "backup.bvf"))
-		vFile = xbmcvfs.File(commons.getSpecialPath(commons.AddonProfile() + "backup.bvf"), 'r')
+		self.localFS.put(path + "backup.bvf", commons.path(commons.AddonProfile() + "backup.bvf"))
+		vFile = xbmcvfs.File(commons.path(commons.AddonProfile() + "backup.bvf"), 'r')
 		jsonString = vFile.read()
 		vFile.close()
 		try:

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import commons
 import urlparse
-import Commons as commons
 from resources.lib.SystemRecovery import SystemRecovery
 
 

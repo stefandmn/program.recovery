@@ -2,7 +2,7 @@
 
 import sys
 import zipfile
-import Commons as commons
+import commons
 
 if hasattr(sys.modules["__main__"], "xbmc"):
 	xbmc = sys.modules["__main__"].xbmc

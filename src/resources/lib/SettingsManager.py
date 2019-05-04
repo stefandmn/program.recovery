@@ -2,7 +2,7 @@
 
 import sys
 import json
-import Commons as commons
+import commons
 from xml.dom import minidom
 from xml.parsers.expat import ExpatError
 
@@ -24,7 +24,7 @@ class SettingsManager:
 	found_settings = list()
 
 	def __init__(self,settingsFile):
-		self._readFile(commons.getSpecialPath(settingsFile))
+		self._readFile(commons.path(settingsFile))
 
 	def run(self):
 		# get a list of all the settings we can manipulate via json

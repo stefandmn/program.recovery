@@ -1,6 +1,6 @@
 # MCPi language file
 # Addon Name: System Recovery
-# Addon id: plugin.recovery
+# Addon id: program.recovery
 # Addon Provider: AMSD
 msgid ""
 msgstr ""
