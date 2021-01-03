@@ -123,5 +123,5 @@ msgid "Restore session has been finished"
 msgstr ""
 
 msgctxt "#30058"
-msgid "Restart MCPi?"
+msgid "Restart Kodi?"
 msgstr ""

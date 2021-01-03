@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import sys
 import zipfile
 import common
@@ -73,7 +74,7 @@ class FileSystem:
 
 class LocalFileSystem(FileSystem):
 
-	def listdir(self,directory):
+	def listdir(self, directory):
 		return xbmcvfs.listdir(directory)
 
 
@@ -98,7 +99,8 @@ class LocalFileSystem(FileSystem):
 
 
 	def exists(self, aFile):
-		return xbmcvfs.exists(aFile)
+		# return xbmcvfs.exists(aFile)
+		return os.path.exists(aFile)
 
 
 

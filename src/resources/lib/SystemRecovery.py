@@ -179,7 +179,7 @@ class SystemRecovery:
 		if common.setting("compress_backups"):
 			zip_name = self.remoteFS.RootPath[:-1] + ".zip"
 			self.remoteFS.cleanup()
-			self.localFS.rename(common.path("special://temp/MCPiBackup.zip"), common.path("special://temp/" + zip_name))
+			self.localFS.rename(common.path("special://temp/backup.zip"), common.path("special://temp/" + zip_name))
 			fileManager.addFile(common.path("special://temp/" + zip_name))
 			# set root to data dir home
 			self.localFS.setRootPath(common.path("special://temp/"))
@@ -314,20 +314,20 @@ class SystemRecovery:
 
 	def run(self, mode=-1):
 		result = True
-		if not common.any2bool(xbmc.getInfoLabel("Window(%s).Property(%s)" % (10000, "PluginRecovery.Running"))):
+		if not common.any2bool(xbmc.getInfoLabel("Window(%s).Property(%s)" % (10000, "SystemRecovery.Running"))):
 			# set windows setting to true
 			window = xbmcgui.Window(10000)
-			window.setProperty("PluginRecovery.Running", "true")
+			window.setProperty("SystemRecovery.Running", "true")
 			if self.remoteFS.RootPath is not None and self.remoteFS.RootPath != '':
 				common.debug("Local directory: " + self.localFS.RootPath + ", Remote directory: " + self.remoteFS.RootPath, "SystemRecovery")
 				if mode == self.Backup:
 					if common.setting("compress_backups"):
 						# delete old temp file
-						if self.localFS.exists(common.path('special://temp/MCPiBackup.zip')):
-							self.localFS.rmfile(common.path('special://temp/MCPiBackup.zip'))
+						if self.localFS.exists(common.path('special://temp/backup.zip')):
+							self.localFS.rmfile(common.path('special://temp/backup.zip'))
 						# save the remote file system and use the zip vfs
 						self.savedRemoteFS = self.remoteFS
-						self.remoteFS = ZipFileSystem(common.path("special://temp/MCPiBackup.zip"),"w")
+						self.remoteFS = ZipFileSystem(common.path("special://temp/backup.zip"),"w")
 					self.remoteFS.setRootPath(self.remoteFS.RootPath + time.strftime("%Y%m%d%H%M") + "/")
 					# run backup process
 					self.backup()
@@ -346,7 +346,7 @@ class SystemRecovery:
 			else:
 				result = False
 			# reset the window setting
-			window.setProperty("PluginRecovery.Running", "")
+			window.setProperty("SystemRecovery.Running", "")
 		else:
 			common.warn('Script already running, no additional instance is needed')
 			result = False

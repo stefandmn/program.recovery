@@ -2,7 +2,6 @@
 
 import sys
 import common
-import urlparse
 from resources.lib.SystemRecovery import SystemRecovery
 
 
@@ -14,7 +13,7 @@ if len(sys.argv) > 1:
 		args = i
 		if args.startswith('?'):
 			args = args[1:]
-		params.update(dict(urlparse.parse_qsl(args)))
+		params.update(dict(common.urlparsequery(args)))
 
 if "mode" in params:
 	if params['mode'] == 'backup':
@@ -24,6 +23,7 @@ if "mode" in params:
 
 if mode == -1:
 	mode = common.SelectDialog(options=[common.translate(30016), common.translate(30017)])
+common.trace("Running system recovery program in [%i] mode" %mode)
 
 # check if program should be run
 if mode != -1:
