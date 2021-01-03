@@ -2,7 +2,7 @@
 
 import sys
 import json
-import commons
+import common
 from xml.dom import minidom
 from xml.parsers.expat import ExpatError
 
@@ -17,14 +17,17 @@ else:
 	import xbmcvfs
 
 
+
 class SettingsManager:
 	doc = None
 	settingsFile = None
 	settings_allowed = list()
 	found_settings = list()
 
+
 	def __init__(self,settingsFile):
-		self._readFile(commons.path(settingsFile))
+		self._readFile(common.path(settingsFile))
+
 
 	def run(self):
 		# get a list of all the settings we can manipulate via json
@@ -43,7 +46,7 @@ class SettingsManager:
 						self.found_settings.append(secondNode)
 		# go through all the found settings and update them
 		for aSetting in self.found_settings:
-			commons.log("Updating: " + aSetting.json_name() + ", value: " + aSetting.value, "SettingsManager")
+			common.debug("Updating: " + aSetting.json_name() + ", value: " + aSetting.value, "SettingsManager")
 			# check for boolean and numeric values
 			if aSetting.value.isdigit() or aSetting.value == 'true' or aSetting.value == 'false':
 				xbmc.executeJSONRPC('{"jsonrpc":"2.0", "id":1, "method":"Settings.SetSettingValue","params":{"setting":"' + aSetting.json_name() + '","value":' + aSetting.value + '}}')
@@ -51,6 +54,7 @@ class SettingsManager:
 				xbmc.executeJSONRPC('{"jsonrpc":"2.0", "id":1, "method":"Settings.SetSettingValue","params":{"setting":"' + aSetting.json_name() + '","value":"' + aSetting.value + '"}}')
 		# make a copy of the guisettings file to make user based restores easier
 		xbmcvfs.copy(self.settingsFile, xbmc.translatePath("special://home/userdata/guisettings.xml.restored"))
+
 
 	def __parseNodes(self,nodeList):
 		result = []
@@ -70,13 +74,14 @@ class SettingsManager:
 				result.append(aSetting)
 		return result
 
+
 	def _readFile(self, fileLocation):
 		if xbmcvfs.exists(fileLocation):
 			try:
 				self.doc = minidom.parse(fileLocation)
 				self.settingsFile = fileLocation
 			except ExpatError as err:
-				commons.warn("Can't read " + fileLocation + ": %s" %str(err), "SettingsManager")
+				common.warn("Can't read " + fileLocation + ": %s" %str(err), "SettingsManager")
 
 
 class SettingNode:
@@ -86,8 +91,10 @@ class SettingNode:
 	hasChildren = False
 	isDefault = True
 
+
 	def __init__(self, name):
 		self.name = name
+
 
 	def json_name(self):
 		return self.parent + "." + self.name

@@ -1,4 +1,4 @@
-# MCPi language file
+# Kodi language file
 # Addon Name: System Recovery
 # Addon id: program.recovery
 # Addon Provider: AMSD
