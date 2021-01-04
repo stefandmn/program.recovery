@@ -50,7 +50,7 @@ if mode != -1:
 					common.debug(params['archive'] + ' is not a valid restore point')
 			else:
 				# allow user to select the backup to restore from
-				mode = common.SelectDialog(title=common.translate(30021), options=pointNames)
+				selectedRestore = common.SelectDialog(title=common.translate(30021), options=pointNames)
 			if selectedRestore != -1:
 				recovery.doSelectRestore(restorePoints[selectedRestore][0])
 				common.DlgNotificationMsg(common.translate(30055), time=5000)

@@ -182,7 +182,7 @@ class FileManager:
 		except UnicodeDecodeError:
 			filename = filename.decode('ISO-8859-2')
 		# write the full remote path name of this file
-		common.debug("Add file: " + filename, "FileManager")
+		common.trace("Add file: " + filename, "FileManager")
 		self.fileArray.append(filename)
 
 

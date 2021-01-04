@@ -357,7 +357,7 @@ class SystemRecovery:
 		result = True
 		common.debug("Writing files to '" + dest.RootPath + "', Source is '" + source.RootPath + "'", "SystemRecovery")
 		for aFile in fileList:
-			common.debug('Writing file: ' + aFile, "SystemRecovery")
+			common.trace('Writing file: ' + aFile, "SystemRecovery")
 			if aFile.startswith("-"):
 				dest.mkdir(dest.RootPath + aFile[len(source.RootPath) + 1:])
 			else:
@@ -395,7 +395,7 @@ class SystemRecovery:
 				remove_num = 0
 				# update the progress bar if it is available
 				while remove_num < (len(dirs) - total_backups):
-					common.debug("Removing backup " + dirs[remove_num][0], "SystemRecovery")
+					common.trace("Removing backup " + dirs[remove_num][0], "SystemRecovery")
 					if dirs[remove_num][0].split('.')[-1] == 'zip':
 						# this is a file, remove it that way
 						self.remoteFS.rmfile(self.remoteBasePath + dirs[remove_num][0])
